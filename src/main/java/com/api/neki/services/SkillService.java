@@ -85,4 +85,21 @@ public class SkillService {
                 .orElseThrow(() -> new NekiException("Nenhum registro encontrado para a Skill: " + id));
         skillsRepository.deleteById(id);
     }
+
+    public SkillsDTO findSkillBy(Long idUser, Long idSkill) {
+        Optional<List<Skills>> optionalSkillsList = skillsRepository.findByUserId(idUser);
+
+        if (optionalSkillsList.isEmpty()) {
+            throw new NekiException("Nenhuma skill encontrada para o usuário de Id: " + idUser);
+        }
+
+        List<SkillsDTO> skillResp = optionalSkillsList.get()
+                .stream()
+                .filter(skill -> skill.getId().equals(idSkill))
+                .map(skill -> mapper.map(skill, SkillsDTO.class))
+                .collect(Collectors.toList());
+
+        return skillResp.stream().findFirst().orElseThrow((() ->
+                new NekiException("Nenhum registro encontrado para a Skill: " + idSkill)));
+    }
 }

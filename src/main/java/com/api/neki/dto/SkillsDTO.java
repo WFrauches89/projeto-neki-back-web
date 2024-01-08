@@ -52,4 +52,5 @@ public class SkillsDTO {
     public void setLevel(String level) {
         this.level = level;
     }
+
 }
